@@ -1,11 +1,15 @@
 {
   "name": "Barcode-Scanner-Server",
   "version": "1.0.0",
-  "main": "controller/controller.js",
+  "main": "controller/server.js",
   "repository": "git@github.com:GlennOlsson/Barcode-Scanner-Server.git",
   "author": "Glenn Olsson <glennholsson@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node controller/controller.js"
-  }
+    "start": "node controller/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "type": "module"
 }
