@@ -2,13 +2,16 @@ import { addClientToSession, createSession, itemScanned } from './sessionManager
 
 import express from 'express'
 import expressWs from 'express-ws'
-
+import cors from 'cors'
 
 const app = express()
 const ws = expressWs(app)
 const port = 3000
 
+app.use(cors())
+
 app.post("/session/create", function(req, res){
+	console.log("Create session");
 	let session = createSession();
 	res.send(session.id);
 });
