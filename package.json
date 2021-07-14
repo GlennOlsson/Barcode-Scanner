@@ -9,7 +9,8 @@
     "start": "node controller/server.js"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-ws": "^5.0.2"
   },
   "type": "module"
 }
