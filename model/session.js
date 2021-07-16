@@ -4,8 +4,12 @@ export default class Session {
 	clients = []
 	scanned = []
 
-	addScanned(content) {
+	itemScanned(content) {
 		this.scanned.push(content)
+
+		this.broadcast(JSON.stringify({
+			"scanned": content
+		}));
 	}
 
 	addClient(client) {

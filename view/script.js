@@ -14,14 +14,30 @@ function reRender() {
 
 	let scanList = document.getElementById("scan-list");
 	
+	// Empty scan list, re render each time (ugly)
 	scanList.innerHTML = "";
 
+	//Render scan list
 	scans.forEach(scan => {
 		let li = document.createElement("li");
 		li.textContent = scan;
 		li.key = scan + Date()
 		scanList.appendChild(li);
 	})
+
+	renderQR();
+}
+
+function renderQR() {
+	let content = sessionID;
+
+	if(!content) {
+		console.log("No content");
+		return;
+	}
+	
+	new QRCode("qrcode", "http://jindo.dev.naver.com/collie");
+	console.log("Created QR code")
 }
 
 function createSession() {
@@ -38,6 +54,38 @@ function createSession() {
 		.catch(err => {
 			console.log("Error", err)
 		});
+}
+
+function joinSessionClicked() {
+	let sessionInputElem = document.getElementById("join-session-input");
+	let sessionIDInput = sessionInputElem.value;
+
+	let joinButton = document.getElementById("join-session-button");
+	joinButton.disabled = true;
+
+	console.log("Session id", sessionIDInput)
+	
+	fetch("http://localhost:3000/session/" + sessionIDInput)
+		.then(res => {
+			if(res.status == 404) {
+				throw Error(`No session with id '${sessionIDInput}'`);
+			} else {
+				sessionID = sessionIDInput;
+				return res.json();
+			}
+		})
+		.then(jsonResp => {
+			scans = jsonResp.scanned;
+		})
+		.then(() => {
+			reRender();
+			connectToSession();
+		})
+		.catch(err => {
+			let errorP = document.getElementById("join-session-error");
+				errorP.textContent = err;
+				joinButton.disabled = false;
+		})
 }
 
 function connectToSession() {

@@ -35,6 +35,15 @@ function generateSessionID() {
 	return id;
 }
 
+export function getSession(sessionId) {
+	let session = sessions.find(s => s.id === sessionId);
+	if(!session) {
+		console.log("Session does not exist", sessionId);
+		return null;
+	}
+	return session;
+}
+
 /**
  * Creates a session and returns the Session object
  */
@@ -68,8 +77,5 @@ export function itemScanned(sessionID, scannedValue) {
 		return;
 	}
 
-	session.broadcast(JSON.stringify({
-		"scanned": scannedValue
-	}));
-
+	session.itemScanned(scannedValue);
 }

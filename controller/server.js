@@ -1,4 +1,4 @@
-import { addClientToSession, createSession, itemScanned } from './sessionManager.js'
+import { addClientToSession, createSession, getSession, itemScanned } from './sessionManager.js'
 
 import express from 'express'
 import expressWs from 'express-ws'
@@ -17,8 +17,15 @@ app.post("/session/create", function(req, res){
 });
 
 app.get("/session/:id", function(req, res){
-	let sessionId = req.id;
+	let sessionId = req.params.id;
 	console.log("Requesting session " + sessionId);
+	let session = getSession(sessionId);
+	if(!session) {
+		res.status(404);
+		res.send(JSON.stringify({error: "No session with id " + sessionId}));
+	} else {
+		res.send(JSON.stringify(session))
+	}
 });
 
 app.ws("/session/connect", function(client, req) {

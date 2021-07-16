@@ -3,9 +3,27 @@
 }
 
 #with-session {
-	align-self: center;
+	width: 50%;
+	padding-left: 25%;
 }
 
 #without-session {
-	align-self: center;
+	width: 50%;
+	padding-left: 25%;
+}
+
+#join-session-container {
+	float: right;
+}
+
+#join-session-error {
+	color: red;
+}
+
+#session-display {
+	display: inline;
+}
+
+#qrcode {
+	float: right;
 }
