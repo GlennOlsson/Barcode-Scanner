@@ -3,6 +3,36 @@ let sessionID = undefined;
 
 let scans = [];
 
+function createScanElement(scanValue, index) {
+	let li = document.createElement("li");
+
+	let text = document.createElement("p");
+
+	li.appendChild(text);
+
+	text.textContent = scanValue;
+
+	let copyButton = document.createElement("button");
+	copyButton.onclick = () => {
+		console.log("'Copy " + scanValue);
+		navigator.clipboard.writeText(scanValue);
+		console.log("'Copy " + scanValue);
+	}
+	copyButton.textContent = "Copy";
+	copyButton.style.float = "right";
+
+	li.appendChild(copyButton);
+
+	li.key = scanValue + Date(); //Unique key
+
+	// Alternating colors for rows
+	let alpha = index % 2 === 0 ? 0.3 : 0.7;
+	let backgroundColor = `rgba(100, 100, 100, ${alpha})`;
+	li.style.backgroundColor = backgroundColor;
+
+	return li;
+}
+
 /**
  * Called when sessionID might have changed i.e. must update page
  */
@@ -14,15 +44,14 @@ function reRender() {
 
 	let scanList = document.getElementById("scan-list");
 	
+
 	// Empty scan list, re render each time (ugly)
 	scanList.innerHTML = "";
 
 	//Render scan list
-	scans.forEach(scan => {
-		let li = document.createElement("li");
-		li.textContent = scan;
-		li.key = scan + Date()
-		scanList.appendChild(li);
+	scans.forEach((scan, index) => {
+		let scanElement = createScanElement(scan, index);
+		scanList.appendChild(scanElement);
 	})
 
 	renderQR();
@@ -36,12 +65,10 @@ function renderQR() {
 		return;
 	}
 	
-	new QRCode("qrcode", "http://jindo.dev.naver.com/collie");
-	console.log("Created QR code")
+	new QRCode("qrcode", sessionID);
 }
 
 function createSession() {
-	console.log("Create")
 	fetch("http://localhost:3000/session/create", {
 		method: "POST"
 	})
@@ -58,12 +85,13 @@ function createSession() {
 
 function joinSessionClicked() {
 	let sessionInputElem = document.getElementById("join-session-input");
-	let sessionIDInput = sessionInputElem.value;
+	let sessionIDInputRaw = sessionInputElem.value;
+
+	let sessionIDInput = sessionIDInputRaw.toUpperCase().trim();
 
 	let joinButton = document.getElementById("join-session-button");
 	joinButton.disabled = true;
 
-	console.log("Session id", sessionIDInput)
 	
 	fetch("http://localhost:3000/session/" + sessionIDInput)
 		.then(res => {
@@ -108,6 +136,13 @@ function connectToSession() {
 }
 
 window.onload = () => {
-	console.log("loaded");
 	reRender();
+
+	// navigator.permissions.query({name: "clipboard-write"}).then(result => {
+	// 	if (result.state == "granted" || result.state == "prompt") {
+	// 			console.log("User accepts clipboard mods");
+	// 	} else {
+	// 		console.log("User does not agree to clipboard mods");
+	// 	}
+	// });
 }

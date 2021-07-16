@@ -24,6 +24,14 @@
 	display: inline;
 }
 
+#scan-list > li > p {
+	display: inline-block;
+}
+
+#scan-list > li {
+	list-style: none;
+}
+
 #qrcode {
 	float: right;
 }
