@@ -13,7 +13,7 @@ app.use(cors())
 app.post("/session/create", function(req, res){
 	console.log("Create session");
 	let session = createSession();
-	res.send(session.id);
+	res.send(JSON.stringify(session));
 });
 
 app.get("/session/:id", function(req, res){

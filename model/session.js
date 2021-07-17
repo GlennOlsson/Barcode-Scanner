@@ -1,3 +1,4 @@
+import Scan from "./scan";
 
 export default class Session {
 	id;
@@ -5,10 +6,13 @@ export default class Session {
 	scanned = []
 
 	itemScanned(content) {
-		this.scanned.push(content)
+
+		let scan = new Scan(content);
+
+		this.scanned.push(scan);
 
 		this.broadcast(JSON.stringify({
-			"scanned": content
+			scan
 		}));
 	}
 
@@ -23,6 +27,6 @@ export default class Session {
 	broadcast(msg) {
 		this.clients.forEach(client => {
 			client.send(msg);
-		})
+		});
 	}
 }

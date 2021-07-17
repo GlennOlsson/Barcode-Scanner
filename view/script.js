@@ -14,9 +14,7 @@ function createScanElement(scanValue, index) {
 
 	let copyButton = document.createElement("button");
 	copyButton.onclick = () => {
-		console.log("'Copy " + scanValue);
 		navigator.clipboard.writeText(scanValue);
-		console.log("'Copy " + scanValue);
 	}
 	copyButton.textContent = "Copy";
 	copyButton.style.float = "right";
@@ -92,7 +90,6 @@ function joinSessionClicked() {
 	let joinButton = document.getElementById("join-session-button");
 	joinButton.disabled = true;
 
-	
 	fetch("http://localhost:3000/session/" + sessionIDInput)
 		.then(res => {
 			if(res.status == 404) {
@@ -127,9 +124,9 @@ function connectToSession() {
 	}
 
 	socket.onmessage = (event) => {
-		console.log("GOT", event.data);
 		let data = JSON.parse(event.data);
 		scans.push(data.scanned);
+		navigator.clipboard.writeText(data.scanned);
 		reRender();
 	}
 

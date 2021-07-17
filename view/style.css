@@ -33,5 +33,5 @@
 }
 
 #qrcode {
-	float: right;
+	display: inline-block;
 }
